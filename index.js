@@ -15,6 +15,12 @@ var headers = {
   "Authorization":"Token token="+config.get("access")
 }
 
+var alarm = null;
+Gpio = require('onoff').Gpio,
+alarm = new Gpio(17, 'out');
+alarm.writeSync(0);
+
+
 checkIncident();
 
 function checkIncident() {
@@ -85,16 +91,11 @@ function flash(signal) {
     delay = unit * 3;
   }
   process.stdout.write(signal);
-  if (consoleOnly) {
+  if (signal == '_') {
     sleep.usleep(delay);
-  }
-  else {
-    if (signal == '_') {
-        sleep.usleep(delay);
-    } else {
-        led.writeSync(1);
-        sleep.usleep(delay)
-        led.writeSync(0);
-    }
+  } else {
+    alarm.writeSync(1);
+    sleep.usleep(delay)
+    alarm.writeSync(0);
   }
 }
