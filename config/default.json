@@ -2,7 +2,7 @@
   "url":"",
   "access":"",
   "consoleOnly" : false,
-  "unitMilliSeconds" : 150,
+  "unitMilliSeconds" : 250,
   "pin" : 17,
   "morseCode" : {
     "a" : "._-",
@@ -43,5 +43,6 @@
     "9" : "-_-_-_-_.",
     " " : "_______"
   },
-  "debug" : "true"
+  "debug" : "true",
+  "normalStatus" : "resolved"
 }
