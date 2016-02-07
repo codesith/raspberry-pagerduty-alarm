@@ -1,0 +1,31 @@
+{
+  "name": "raspberry-pagerduty-alarm",
+  "version": "1.0.0",
+  "description": "Sound alarm when an incident is detected",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codesith/raspberry-pagerduty-alarm.git"
+  },
+  "keywords": [
+    "node",
+    "raspberry",
+    "io",
+    "PagerDuty"
+  ],
+  "author": "John Xiao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codesith/raspberry-pagerduty-alarm/issues"
+  },
+  "homepage": "https://github.com/codesith/raspberry-pagerduty-alarm",
+  "dependencies": {
+    "restler": "~3.4.0",
+    "config"  : "~1.17.1",
+    "dateformat" : "~1.0.12",
+    "sleep"   : "~3.0.0"
+  }
+}
