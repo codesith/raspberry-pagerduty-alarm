@@ -3,8 +3,9 @@
   "access":"",
   "timeoutMilliSeconds" : 30000,
   "unitMilliSeconds" : 300,
-  "alarmPin" : 23,
-  "heartbeatPin" : 17,
+  "alarmSpeaker" : 23,
+  "heartbeatLed" : 17,
+  "alarmLed" : 22,
   "limit" : 100,
   "morseCode" : {
     "a" : "._-",

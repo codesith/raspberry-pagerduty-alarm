@@ -9,8 +9,6 @@ var access = config.get("access");
 var timeout = config.get("timeoutMilliSeconds");
 var unit = config.get("unitMilliSeconds")*1000; // convert from millisecond to microsecond
 var morseCode = config.get("morseCode");
-var alarmPin = config.get("alarmPin");
-var heartbeatPin = config.get("heartbeatPin");
 var normal = config.get("normalStatus");
 var limit = config.get("limit");
 var headers = {
@@ -18,11 +16,10 @@ var headers = {
 }
 
 var alarm = null;
-Gpio = require('onoff').Gpio,
-alarm = new Gpio(alarmPin, 'out');
-alarm.writeSync(0);
-heartbeat = new Gpio(heartbeatPin, 'out');
-heartbeat.writeSync(0);
+Gpio = require("onoff").Gpio,
+alarmSpeaker = new Gpio(config.get("alarmSpeaker"), "out");
+heartbeatLed = new Gpio(config.get("heartbeatLed"), "out");
+alarmLed = new Gpio(config.get("alarmLed"), "out");
 
 
 checkIncident();
@@ -38,14 +35,14 @@ function checkIncident() {
 
   var url = baseUrl + "?since=" + since + "&until=" + until + "&limit=" + limit;
   if(debug) console.log(url);
-  rest.get(url, {headers: headers}).on('success', function(result) {
+  rest.get(url, {headers: headers}).on("success", function(result) {
     if (result.total > limit) {
       if(debug) console.log("Skip to the last page.");
       // try again
       var offset = result.total - 1;
       url += "&offset=" + offset;
       if(debug) console.log(url);
-      rest.get(url, {headers:headers}).on('success', function(result) {
+      rest.get(url, {headers:headers}).on("success", function(result) {
         processIncident(result.incidents[result.incidents.length-1]);
       });
     } else {
@@ -59,10 +56,12 @@ function processIncident(incident) {
   var timestamp = dateformat(now, "isoDateTime");
   if (incident.status == normal) {
     console.log("@" + timestamp + " status: normal");
-    heartbeat.writeSync(1);
+    heartbeatLed.writeSync(1);
+    alarmLed.writeSync(1);
   } else {
     console.log("@" + timestamp + " status: " + incident.status);
-    heartbeat.writeSync(0);
+    heartbeatLed.writeSync(0);
+    alarmLed.writeSync(1);
     var signals = convertToSignals("SOS");
     for (var i=0; i<signals.length; i++) {
       flash(signals[i]);
@@ -81,26 +80,26 @@ function convertToSignals(text) {
       signals+=signal;
     }
     if (i != text.length-1) {
-      signals+='___';
+      signals+="___";
     }
   }
   return signals;
 }
 
 function flash(signal) {
-  if (!(signal == '.' || signal == '-' ||  signal == '_')) {
+  if (!(signal == "." || signal == "-" ||  signal == "_")) {
     return;
   }
 
   delay = unit;
-  if (signal == '-') {
+  if (signal == "-") {
     delay = unit * 3;
   }
-  if (signal == '_') {
+  if (signal == "_") {
     sleep.usleep(delay);
   } else {
-    alarm.writeSync(1);
+    alarmSpeaker.writeSync(1);
     sleep.usleep(delay)
-    alarm.writeSync(0);
+    alarmSpeaker.writeSync(0);
   }
 }
