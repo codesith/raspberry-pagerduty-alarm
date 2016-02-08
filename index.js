@@ -10,7 +10,7 @@ var headers = {
   "Authorization":"Token token="+config.get("access")
 }
 
-Gpio = require("onoff").Gpio,
+Gpio = require("onoff").Gpio;
 var alarm = new Gpio(config.get("alarm"), "out");
 var green = new Gpio(config.get("green"), "out");
 var yellow = new Gpio(config.get("yellow"), "out");
