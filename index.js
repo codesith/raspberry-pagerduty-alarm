@@ -17,7 +17,9 @@ Gpio = require("onoff").Gpio,
 alarmSpeaker = new Gpio(config.get("alarmSpeaker"), "out");
 heartbeatLed = new Gpio(config.get("heartbeatLed"), "out");
 alarmLed = new Gpio(config.get("alarmLed"), "out");
-
+alarmSpeaker.writeSync(0);
+heartbeatLed.writeSync(0);
+alarmLed.writeSync(0);
 
 checkIncident();
 
@@ -54,7 +56,8 @@ function processIncident(incident) {
   if (incident.status == normal) {
     console.log("@" + timestamp + " status: normal");
     heartbeatLed.writeSync(1);
-    alarmLed.writeSync(1);
+    alarmLed.writeSync(0);
+    alarmSpeaker.writeSync(0);
   } else {
     console.log("@" + timestamp + " status: " + incident.status);
     heartbeatLed.writeSync(0);
