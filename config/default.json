@@ -5,6 +5,7 @@
   "unitMilliSeconds" : 300,
   "alarmPin" : 23,
   "heartbeatPin" : 17,
+  "limit" : 100,
   "morseCode" : {
     "a" : "._-",
     "b" : "-_._._.",

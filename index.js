@@ -10,8 +10,9 @@ var timeout = config.get("timeoutMilliSeconds");
 var unit = config.get("unitMilliSeconds")*1000; // convert from millisecond to microsecond
 var morseCode = config.get("morseCode");
 var alarmPin = config.get("alarmPin");
+var heartbeatPin = config.get("heartbeatPin");
 var normal = config.get("normalStatus");
-var limit = 100;
+var limit = config.get("limit");
 var headers = {
   "Authorization":"Token token="+config.get("access")
 }
