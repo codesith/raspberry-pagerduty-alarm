@@ -1,7 +1,7 @@
 {
   "url":"",
   "access":"",
-  "consoleOnly" : false,
+  "timeoutMilliSeconds" : 30,
   "unitMilliSeconds" : 300,
   "pin" : 17,
   "morseCode" : {

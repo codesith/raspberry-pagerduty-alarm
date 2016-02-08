@@ -6,6 +6,7 @@ var sleep = require("sleep");
 var debug=config.get("debug");
 var baseUrl = config.get("url");
 var access = config.get("access");
+var timeout = config.get("timeoutMilliSeconds");
 var unit = config.get("unitMilliSeconds")*1000; // convert from millisecond to microsecond
 var morseCode = config.get("morseCode");
 var pin = config.get("pin");
@@ -25,7 +26,7 @@ checkIncident();
 
 function checkIncident() {
   // wait for one minute and check again
-  setTimeout(checkIncident, 60000);
+  setTimeout(checkIncident, timeout);
 
   var now = new Date()
   var until = dateformat(now, "isoDateTime");
