@@ -55,11 +55,13 @@ function checkIncident() {
 }
 
 function processIncident(incident) {
+  var now = new Date()
+  var timestamp = dateformat(now, "isoDateTime");
   if (incident.status == normal) {
-    console.log("@" + until + " status: normal");
+    console.log("@" + timestamp + " status: normal");
     heartbeat.writeSync(1);
   } else {
-    console.log("@" + until + " status: " + incident.status);
+    console.log("@" + timestamp + " status: " + incident.status);
     heartbeat.writeSync(0);
     var signals = convertToSignals("SOS");
     for (var i=0; i<signals.length; i++) {
