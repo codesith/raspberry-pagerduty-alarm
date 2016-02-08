@@ -90,7 +90,6 @@ function flash(signal) {
   if (signal == '-') {
     delay = unit * 3;
   }
-  process.stdout.write(signal);
   if (signal == '_') {
     sleep.usleep(delay);
   } else {
