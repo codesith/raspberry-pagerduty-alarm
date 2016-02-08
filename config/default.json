@@ -4,7 +4,7 @@
   "timeoutMilliSeconds" : 30000,
   "alarm" : 18,
   "green" : 4,
-  "yello" : 17,
+  "yellow" : 17,
   "red" : 22,
   "limit" : 100
 }
