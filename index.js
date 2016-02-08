@@ -2,11 +2,9 @@ var config = require("config");
 var rest = require("restler");
 var dateformat = require("dateformat");
 
-var debug=config.get("debug");
 var baseUrl = config.get("url");
 var access = config.get("access");
 var timeout = config.get("timeoutMilliSeconds");
-var normal = config.get("normalStatus");
 var limit = config.get("limit");
 var headers = {
   "Authorization":"Token token="+config.get("access")
@@ -14,9 +12,10 @@ var headers = {
 
 var alarm = null;
 Gpio = require("onoff").Gpio,
-alarmSpeaker = new Gpio(config.get("alarmSpeaker"), "out");
-heartbeatLed = new Gpio(config.get("heartbeatLed"), "out");
-alarmLed = new Gpio(config.get("alarmLed"), "out");
+alarm = new Gpio(config.get("alarm"), "out");
+green = new Gpio(config.get("green"), "out");
+yellow = new Gpio(config.get("yellow"), "out");
+red = new Gpio(config.get("red"), "out");
 alarmSpeaker.writeSync(0);
 heartbeatLed.writeSync(0);
 alarmLed.writeSync(0);
@@ -33,14 +32,14 @@ function checkIncident() {
   var since = dateformat(now, "isoDateTime");
 
   var url = baseUrl + "?since=" + since + "&until=" + until + "&limit=" + limit;
-  if(debug) console.log(url);
+  console.log(url);
   rest.get(url, {headers: headers}).on("success", function(result) {
     if (result.total > limit) {
-      if(debug) console.log("Skip to the last page.");
+      console.log("Skip to the last page.");
       // try again
       var offset = result.total - 1;
       url += "&offset=" + offset;
-      if(debug) console.log(url);
+      console.log(url);
       rest.get(url, {headers:headers}).on("success", function(result) {
         processIncident(result.incidents[result.incidents.length-1]);
       });
@@ -53,20 +52,28 @@ function checkIncident() {
 function processIncident(incident) {
   var now = new Date()
   var timestamp = dateformat(now, "isoDateTime");
-  if (incident.status == normal) {
+  console.log("@" + timestamp + " status: " + incident.status);
+  if (incident.status == "resolved") {
     console.log("@" + timestamp + " status: normal");
-    heartbeatLed.writeSync(1);
-    alarmLed.writeSync(0);
-    alarmSpeaker.writeSync(0);
+    green.writeSync(1);
+    yellow.writeSync(0);
+    red.writeSync(0);
+    alarm.writeSync(0);
+  } else if (incident.status == "acknowledged")  {
+    green.writeSync(0);
+    yellow.writeSync(1);
+    red.writeSync(0);
+    alarm.writeSync(1);
+    setTimeout(turnOffAlarm, 3000);
   } else {
-    console.log("@" + timestamp + " status: " + incident.status);
-    heartbeatLed.writeSync(0);
-    alarmLed.writeSync(1);
-    alarmSpeaker.writeSync(1);
+    green.writeSync(0);
+    yellow.writeSync(0);
+    red.writeSync(1);
+    alarm.writeSync(1);
     setTimeout(turnOffAlarm, 10000);
   }
 }
 
 function turnOffAlarm() {
-  alarmSpeaker.writeSync(0);
+  alarm.writeSync(0);
 }

@@ -2,11 +2,9 @@
   "url":"",
   "access":"",
   "timeoutMilliSeconds" : 30000,
-  "unitMilliSeconds" : 300,
-  "alarmSpeaker" : 23,
-  "heartbeatLed" : 17,
-  "alarmLed" : 22,
+  "alarm" : 18,
+  "green" : 4,
+  "yello" : 17,
+  "red" : 22,
   "limit" : 100,
-  "debug" : false,
-  "normalStatus" : "resolved"
 }
