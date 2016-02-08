@@ -1,14 +1,11 @@
 var config = require("config");
 var rest = require("restler");
 var dateformat = require("dateformat");
-var sleep = require("sleep");
 
 var debug=config.get("debug");
 var baseUrl = config.get("url");
 var access = config.get("access");
 var timeout = config.get("timeoutMilliSeconds");
-var unit = config.get("unitMilliSeconds")*1000; // convert from millisecond to microsecond
-var morseCode = config.get("morseCode");
 var normal = config.get("normalStatus");
 var limit = config.get("limit");
 var headers = {
@@ -62,44 +59,11 @@ function processIncident(incident) {
     console.log("@" + timestamp + " status: " + incident.status);
     heartbeatLed.writeSync(0);
     alarmLed.writeSync(1);
-    var signals = convertToSignals("SOS");
-    for (var i=0; i<signals.length; i++) {
-      flash(signals[i]);
-    }
-  }
-}
-
-function convertToSignals(text) {
-  var signals = "";
-  for(var i=0; i<text.length; i++) {
-    // convert all characters to lower case
-    var signal = morseCode[text.charAt(i).toLowerCase()];
-    // only output singals that are defined by International Morse Code Standard
-    // The only exception is "space" character
-    if (signal != undefined) {
-      signals+=signal;
-    }
-    if (i != text.length-1) {
-      signals+="___";
-    }
-  }
-  return signals;
-}
-
-function flash(signal) {
-  if (!(signal == "." || signal == "-" ||  signal == "_")) {
-    return;
-  }
-
-  delay = unit;
-  if (signal == "-") {
-    delay = unit * 3;
-  }
-  if (signal == "_") {
-    sleep.usleep(delay);
-  } else {
     alarmSpeaker.writeSync(1);
-    sleep.usleep(delay)
-    alarmSpeaker.writeSync(0);
+    setTimeout(10, turnOffAlarm);
   }
+}
+
+function turnOffAlarm() {
+  alarmSpeaker.writeSync(0);
 }
