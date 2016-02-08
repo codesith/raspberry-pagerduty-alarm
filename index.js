@@ -15,9 +15,10 @@ var alarm = new Gpio(config.get("alarm"), "out");
 var green = new Gpio(config.get("green"), "out");
 var yellow = new Gpio(config.get("yellow"), "out");
 var red = new Gpio(config.get("red"), "out");
-alarmSpeaker.writeSync(0);
-heartbeatLed.writeSync(0);
-alarmLed.writeSync(0);
+alarm.writeSync(0);
+green.writeSync(0);
+yellow.writeSync(0);
+red.writeSync(0);
 
 checkIncident();
 
