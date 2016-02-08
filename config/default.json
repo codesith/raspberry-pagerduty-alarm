@@ -3,7 +3,8 @@
   "access":"",
   "timeoutMilliSeconds" : 30000,
   "unitMilliSeconds" : 300,
-  "pin" : 17,
+  "alarmPin" : 17,
+  "heartbeatPin" : 18,
   "morseCode" : {
     "a" : "._-",
     "b" : "-_._._.",

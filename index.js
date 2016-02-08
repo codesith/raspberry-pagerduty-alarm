@@ -9,7 +9,7 @@ var access = config.get("access");
 var timeout = config.get("timeoutMilliSeconds");
 var unit = config.get("unitMilliSeconds")*1000; // convert from millisecond to microsecond
 var morseCode = config.get("morseCode");
-var pin = config.get("pin");
+var alarmPin = config.get("alarmPin");
 var normal = config.get("normalStatus");
 var limit = 100;
 var headers = {
@@ -18,8 +18,10 @@ var headers = {
 
 var alarm = null;
 Gpio = require('onoff').Gpio,
-alarm = new Gpio(17, 'out');
+alarm = new Gpio(alarmPin, 'out');
 alarm.writeSync(0);
+heartbeat = new Gpio(heartbeatPin, 'out');
+heartbeat.writeSync(0);
 
 
 checkIncident();
@@ -52,12 +54,12 @@ function checkIncident() {
 }
 
 function processIncident(incident) {
-  var current = new Date();
-  var timestamp = dateformat(current, "yyyy-mm-dd HH:MM:ss");
   if (incident.status == normal) {
-    console.log("@" + timestamp + " status: normal");
+    console.log("@" + until + " status: normal");
+    heartbeat.writeSync(1);
   } else {
-    console.log("@" + timestamp + " status: " + incident.status);
+    console.log("@" + until + " status: " + incident.status);
+    heartbeat.writeSync(0);
     var signals = convertToSignals("SOS");
     for (var i=0; i<signals.length; i++) {
       flash(signals[i]);
