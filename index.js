@@ -60,7 +60,7 @@ function processIncident(incident) {
     heartbeatLed.writeSync(0);
     alarmLed.writeSync(1);
     alarmSpeaker.writeSync(1);
-    setTimeout(10, turnOffAlarm);
+    setTimeout(turnOffAlarm, 10);
   }
 }
 
