@@ -1,6 +1,6 @@
 {
-  "url":"",
-  "access":"",
+  "url":"change me in production.json",
+  "access":"change me in production.json",
   "timeoutMilliSeconds" : 30000,
   "alarm" : 18,
   "green" : 4,

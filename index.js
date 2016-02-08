@@ -54,7 +54,6 @@ function processIncident(incident) {
   var timestamp = dateformat(now, "isoDateTime");
   console.log("@" + timestamp + " status: " + incident.status);
   if (incident.status == "resolved") {
-    console.log("@" + timestamp + " status: normal");
     green.writeSync(1);
     yellow.writeSync(0);
     red.writeSync(0);
